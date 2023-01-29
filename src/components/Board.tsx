@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { config, Difficulty } from '../lib/config';
-import Cell from './Cell';
+import Cell, {CellType} from './Cell';
 
 type BoardType = {
   difficulty: string
@@ -8,10 +8,17 @@ type BoardType = {
 
 const Board = ({difficulty} : BoardType)  => {
   const board = config[difficulty as Difficulty];
-  //const map = [board.height][board.width];
+  const [map, setMap] = useState<CellType>();
 
   useEffect(() => {
     // Set bomb cells
+    let bombCounter = board.mines;
+
+    while(bombCounter) {
+      // Set bomb to random coordinates of map
+      bombCounter--;
+    }
+
     // Set empty cells
   }, [board]);
 
@@ -19,7 +26,8 @@ const Board = ({difficulty} : BoardType)  => {
     <div>Board <br />
       <div>
         {board.width} - {board.height} - {board.mines}
-        <Cell />
+        <Cell type='empty' value={2} />
+        <Cell type='mine' value={-1} />
       </div>
     </div>
   )
