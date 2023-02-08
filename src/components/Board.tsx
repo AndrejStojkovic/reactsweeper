@@ -25,7 +25,6 @@ const Board = ({difficulty} : BoardProps)  => {
           type: 'empty',
           value: -1,
         });
-        console.log(newBoard[i][j]);
       }
     }
 
@@ -87,8 +86,8 @@ const Board = ({difficulty} : BoardProps)  => {
 
 function countMines(board: Cell[][], i: number, j: number, width: number, height: number) {
   let ct = 0;
-  for(var x = i - 1; x < i + 1; x++) {
-    for(var y = j - 1; y < j + 1; y++) {
+  for(var x = i - 1; x <= i + 1; x++) {
+    for(var y = j - 1; y <= j + 1; y++) {
       if(isValid(x, y, width, height) && board[x][y].props.type === 'mine') {
         ct++;
       }
@@ -99,7 +98,7 @@ function countMines(board: Cell[][], i: number, j: number, width: number, height
 }
 
 function isValid(i: number, j: number, width: number, height: number) {
-  return i >= 0 && i < width && j >= 0 && j < height ? 1 : 0;
+  return i >= 0 && i < width && j >= 0 && j < height;
 }
 
 export default Board;
