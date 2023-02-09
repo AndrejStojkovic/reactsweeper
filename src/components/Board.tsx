@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { config, Difficulty } from '../lib/config';
 import { randomIntFromInterval } from '../lib/functions';
-import Cell from './Cell';
+import { Cell } from './Cell';
 
 type BoardProps = {
   difficulty: string
@@ -20,11 +20,11 @@ const Board = ({difficulty} : BoardProps)  => {
 
     for(var i = 0; i < cfg.width; i++) {
       for(var j = 0; j < cfg.height; j++) {
-        newBoard[i][j] = new Cell({
+        newBoard[i][j] = {
           isOpened: false,
           type: 'empty',
-          value: -1,
-        });
+          value: -1
+        };
       }
     }
 
@@ -35,23 +35,23 @@ const Board = ({difficulty} : BoardProps)  => {
       // Set bomb to random coordinates of map
       let x: number = randomIntFromInterval(0, cfg.width - 1);
       let y: number = randomIntFromInterval(0, cfg.height - 1);
-      newBoard[x][y] = new Cell({
+      newBoard[x][y] = {
         isOpened: false,
         type: 'mine',
-        value: -1,
-      });
+        value: -1
+      };
       bombCounter--;
     }
 
     // Set empty cells
     for(var i = 0; i < cfg.width; i++) {
       for(var j = 0; j < cfg.height; j++) {
-        if(newBoard[i][j].props.type !== 'mine') {
-          newBoard[i][j] = new Cell({
+        if(newBoard[i][j].type !== 'mine') {
+          newBoard[i][j] = {
             isOpened: false,
             type: 'empty',
             value: countMines(newBoard, i, j, cfg.width, cfg.height)
-          });
+          };
         }
       }
     }
@@ -71,7 +71,7 @@ const Board = ({difficulty} : BoardProps)  => {
                 {cells.map((subCells, j) => {
                   return (
                   <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 border-1 border-gray-400 text-sm font-semibold'>
-                    <span>{subCells.props?.type === 'mine' ? 'M' : subCells.props?.value}</span>
+                    <span>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
                   </div>
                   )
                 })}
@@ -88,12 +88,11 @@ function countMines(board: Cell[][], i: number, j: number, width: number, height
   let ct = 0;
   for(var x = i - 1; x <= i + 1; x++) {
     for(var y = j - 1; y <= j + 1; y++) {
-      if(isValid(x, y, width, height) && board[x][y].props.type === 'mine') {
+      if(isValid(x, y, width, height) && board[x][y].type === 'mine') {
         ct++;
       }
     }
   }
-  console.log(ct);
   return ct;
 }
 

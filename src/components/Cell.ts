@@ -1,5 +1,10 @@
-import React from 'react';
+export type Cell = {
+  isOpened?: boolean,
+  type: 'mine' | 'empty',
+  value: number,
+}
 
+/*
 type CellState = {
   isOpened?: boolean,
   type: 'mine' | 'empty',
@@ -14,4 +19,4 @@ class Cell extends React.Component<CellState> {
   }
 }
 
-export default Cell;
+export default Cell;*/
