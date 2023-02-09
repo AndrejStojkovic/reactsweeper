@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { getHighscoreLocalStorage, setHighscoreLocalStorage } from '../lib/localStorage';
 import Board from './Board';
 
 const Game = () => {
@@ -8,6 +9,10 @@ const Game = () => {
 
   const StartGame = () => setGameState(true);
   const EndGame = () => setGameState(false);
+
+  useEffect(() => {
+    setHighscore(Number(getHighscoreLocalStorage()));
+  }, []);
 
   return (
     <div className='w-full'>
