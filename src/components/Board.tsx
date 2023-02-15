@@ -69,8 +69,9 @@ const Board = ({difficulty} : BoardProps)  => {
 
   const OpenCell = (x: number, y: number) => {
     if(!board) return;
-    board[x][y].isOpened = true;
-    setBoard(board);
+    let newBoard = board;
+    newBoard[x][y].isOpened = true;
+    setBoard(newBoard);
   }
 
   return (
