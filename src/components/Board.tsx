@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { config, Difficulty } from '../lib/config';
 import { randomIntFromInterval } from '../lib/functions';
+import mine from '../media/mine.png';
 import { Cell } from './Cell';
 
 type BoardProps = {
@@ -86,7 +87,10 @@ const Board = ({difficulty} : BoardProps)  => {
                   return (
                     subCells.isOpened ? (
                       <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-opened-cell bg-cover'>
-                        <span className='absolute'>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
+                        <span>
+                          {subCells.type === 'mine' ?
+                            <img className='w-4 h-4' src={mine} alt='M' /> : subCells.value}
+                        </span>
                       </div>
                     ) : (
                       <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold cursor-pointer hover:bg-gray-200 bg-unopened-cell bg-cover'
