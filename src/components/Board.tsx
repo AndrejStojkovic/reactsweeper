@@ -85,12 +85,13 @@ const Board = ({difficulty} : BoardProps)  => {
                 {cells.map((subCells, j) => {
                   return (
                     subCells.isOpened ? (
-                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 border-1 border-gray-400 text-sm font-semibold'>
-                        <span>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
+                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-opened-cell bg-cover'>
+                        <span className='absolute'>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
                       </div>
                     ) : (
-                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-50 border-1 border-gray-400 text-sm font-semibold cursor-pointer hover:bg-gray-200'
-                           onClick={() => OpenCell(i, j)}></div>
+                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold cursor-pointer hover:bg-gray-200 bg-unopened-cell bg-cover'
+                        onClick={() => OpenCell(i, j)}>
+                      </div>
                     )
                   )
                 })}

@@ -38,6 +38,10 @@ module.exports = {
       },
       scale: {
         'base': '1.025'
+      },
+      backgroundImage: {
+        'opened-cell': "url('/src/media/opened_cell.png')",
+        'unopened-cell': "url('/src/media/unopened_cell.png')",
       }
     },
   },
