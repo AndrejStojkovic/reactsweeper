@@ -71,7 +71,7 @@ const Board = ({difficulty} : BoardProps)  => {
     if(!board) return;
     let newBoard = board;
     newBoard[x][y].isOpened = true;
-    setBoard(newBoard);
+    setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
   }
 
   return (
