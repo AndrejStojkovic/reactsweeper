@@ -25,3 +25,14 @@ export const config: IConfig = {
     mines: 128
   }
 };
+
+export const colors: string[] = [
+  '0000fd',   // 1. blue
+  '017e00',   // 2. green
+  'ff0000',   // 3. red
+  '010080',   // 4. dark blue
+  '810101',   // 5. dark red
+  '008080',   // 6. cyan
+  '000000',   // 7. black
+  '808080',   // 8. gray
+]
