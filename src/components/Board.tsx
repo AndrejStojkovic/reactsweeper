@@ -44,7 +44,9 @@ const Board = ({difficulty} : BoardProps)  => {
     }
 
     // Set empty cells
+    // eslint-disable-next-line
     for(var i = 0; i < cfg.width; i++) {
+      // eslint-disable-next-line
       for(var j = 0; j < cfg.height; j++) {
         if(newBoard[i][j].type !== 'mine') {
           newBoard[i][j] = {
@@ -60,6 +62,17 @@ const Board = ({difficulty} : BoardProps)  => {
     setBoard(newBoard);
   }, [cfg]);
 
+  useEffect(() => {
+    console.log('board updated');
+    console.log(board);
+  }, [board]);
+
+  const OpenCell = (x: number, y: number) => {
+    if(!board) return;
+    board[x][y].isOpened = true;
+    setBoard(board);
+  }
+
   return (
     <div>Board <br />
       <div>
@@ -70,9 +83,14 @@ const Board = ({difficulty} : BoardProps)  => {
               <div key={i} className='row flex flex-row'>
                 {cells.map((subCells, j) => {
                   return (
-                  <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 border-1 border-gray-400 text-sm font-semibold'>
-                    <span>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
-                  </div>
+                    subCells.isOpened ? (
+                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 border-1 border-gray-400 text-sm font-semibold'>
+                        <span>{subCells.type === 'mine' ? 'M' : subCells.value}</span>
+                      </div>
+                    ) : (
+                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-50 border-1 border-gray-400 text-sm font-semibold cursor-pointer hover:bg-gray-200'
+                           onClick={() => OpenCell(i, j)}></div>
+                    )
                   )
                 })}
               </div>

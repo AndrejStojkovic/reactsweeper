@@ -5,3 +5,11 @@ export const getHighscoreLocalStorage = () => {
 export const setHighscoreLocalStorage = (value: string) => {
   localStorage.setItem('highscore', value);
 }
+
+export const getPlayCounterLocalStorage = () => {
+  return localStorage.getItem('play-counter');
+}
+
+export const setPlayCounterLocalStorage = (value: string) => {
+  localStorage.setItem('play-counter', value);
+}

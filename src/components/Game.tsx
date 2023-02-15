@@ -1,17 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import { getHighscoreLocalStorage, setHighscoreLocalStorage } from '../lib/localStorage';
+import {
+  getHighscoreLocalStorage,
+  setHighscoreLocalStorage,
+  getPlayCounterLocalStorage,
+  setPlayCounterLocalStorage
+} from '../lib/localStorage';
 import Board from './Board';
 
 const Game = () => {
   const [gameState, setGameState] = useState(false);  // false - not started, true - started
   const [difficulty, setDifficulty] = useState('beginner');
   const [highscore, setHighscore] = useState(0);
+  const [playCounter, setPlayCounter] = useState(0);
 
   const StartGame = () => setGameState(true);
   const EndGame = () => setGameState(false);
 
   useEffect(() => {
     setHighscore(Number(getHighscoreLocalStorage()));
+    setPlayCounter(Number(getPlayCounterLocalStorage()));
   }, []);
 
   return (
@@ -29,6 +36,9 @@ const Game = () => {
 
         <div className='highscore text-center'>
           <div>Highscore: <span className='font-semibold'>{highscore}</span></div>
+        </div>
+        <div className='highscore text-center'>
+          <div>Times played: <span className='font-semibold'>{playCounter}</span></div>
         </div>
       </div>
 
