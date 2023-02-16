@@ -83,6 +83,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
     newBoard[x][y].isOpened = true;
     
     if(newBoard[x][y].type === 'mine') {
+      newBoard[x][y].exploded = true;
       RevealBombs();
       // TO-DO: Mark the bomb with a red background
       EndGame();
@@ -128,7 +129,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
                 {cells.map((subCells, j) => {
                   return (
                     subCells.isOpened ? (
-                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-opened-cell bg-cover'>
+                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-cover ${subCells.exploded ? 'bg-exploded-cell' : 'bg-opened-cell'}`}>
                         <span style={{color: subCells.value > 0 ? `#${colors[subCells.value - 1]}` : 'black'}} className='font-bold'>
                           {subCells.type === 'mine' ?
                             <img className='w-4 h-4' src={mine} alt='M' /> : subCells.value > 0 ? subCells.value : ' '}
