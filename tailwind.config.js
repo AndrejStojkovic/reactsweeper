@@ -42,6 +42,7 @@ module.exports = {
       backgroundImage: {
         'opened-cell': "url('/src/media/opened_cell.png')",
         'unopened-cell': "url('/src/media/unopened_cell.png')",
+        'exploded-cell': "url('/src/media/exploded_cell.png')"
       }
     },
   },
