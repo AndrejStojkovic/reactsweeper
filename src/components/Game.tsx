@@ -47,7 +47,10 @@ const Game = () => {
       </div>
 
       <div className='game w-full flex flex-col items-center justify-center'>
-        <Board difficulty={difficulty} />
+        <Board difficulty={difficulty}
+              gameState={gameState}
+              StartGame={StartGame}
+              EndGame={EndGame}/>
       </div>
     </div>
   )

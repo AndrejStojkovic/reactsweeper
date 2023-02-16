@@ -5,10 +5,13 @@ import mine from '../media/mine.png';
 import { Cell } from './Cell';
 
 type BoardProps = {
-  difficulty: string
+  difficulty: string,
+  gameState: boolean,
+  StartGame: () => void,
+  EndGame: () => void
 }
 
-const Board = ({difficulty} : BoardProps)  => {
+const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
   const cfg = config[difficulty as Difficulty];
   const [board, setBoard] = useState<Cell[][]>();
 
@@ -24,7 +27,8 @@ const Board = ({difficulty} : BoardProps)  => {
         newBoard[i][j] = {
           isOpened: false,
           type: 'empty',
-          value: -1
+          value: -1,
+          flagged: false
         };
       }
     }
@@ -37,12 +41,12 @@ const Board = ({difficulty} : BoardProps)  => {
       newBoard[x][y] = {
         isOpened: false,
         type: 'mine',
-        value: -1
+        value: -1,
+        flagged: false
       };
       bombCounter--;
     }
 
-    // Set empty cells
     // eslint-disable-next-line
     for(var i = 0; i < cfg.width; i++) {
       // eslint-disable-next-line
@@ -51,7 +55,8 @@ const Board = ({difficulty} : BoardProps)  => {
           newBoard[i][j] = {
             isOpened: false,
             type: 'empty',
-            value: countMines(newBoard, i, j, cfg.width, cfg.height)
+            value: countMines(newBoard, i, j, cfg.width, cfg.height),
+            flagged: false
           };
         }
       }
@@ -61,22 +66,47 @@ const Board = ({difficulty} : BoardProps)  => {
   }, [cfg]);
 
   const OpenCell = (x: number, y: number) => {
+    if(!gameState) {
+      StartGame();
+    }
+
     if(!board) return;
+
+    if(!isValid(x, y, cfg.width, cfg.height)) return;
+
+    if(board[x][y].isOpened) return;
+
     let newBoard = board;
     newBoard[x][y].isOpened = true;
+    
+    if(newBoard[x][y].type === 'mine') {
+      RevealBombs();
+      // TO-DO: Mark the bomb with a red background
+      EndGame();
+    }
+
+    if(newBoard[x][y].type === 'empty' && !newBoard[x][y].value) {
+      Flood(x, y);
+    }
+
     setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
-
-    // TO-DO: Add a check if the player opens a bomb
   }
 
-  // TO-DO: Create this function, opens neighbouring cells (if there are any) until you find a number
-  const OpenCells = () => {
-
+  const Flood = (x: number, y: number) => {
+    OpenCell(x - 1, y);
+    OpenCell(x + 1, y);
+    OpenCell(x, y - 1);
+    OpenCell(x, y + 1);
   }
 
-  // TO-DO: Create this function
-  const RevealCells = () => {
-
+  const RevealBombs = () => {
+    for(let i = 0; i < cfg.width; i++) {
+      for(let j = 0; j < cfg.height; j++) {
+        if(board && board[i][j].type === 'mine') {
+          board[i][j].isOpened = true;
+        }
+      }
+    }
   }
 
   // TO-DO: Create this function

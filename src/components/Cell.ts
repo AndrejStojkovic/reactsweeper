@@ -2,6 +2,7 @@ export type Cell = {
   isOpened?: boolean,
   type: 'mine' | 'empty',
   value: number,
+  flagged: boolean,
   onClick?: () => void
 }
 
