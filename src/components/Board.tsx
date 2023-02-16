@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { config, Difficulty } from '../lib/config';
+import { config, Difficulty, colors } from '../lib/config';
 import { randomIntFromInterval } from '../lib/functions';
 import mine from '../media/mine.png';
 import { Cell } from './Cell';
@@ -29,11 +29,9 @@ const Board = ({difficulty} : BoardProps)  => {
       }
     }
 
-    // Set bomb cells
     let bombCounter = cfg.mines;
 
     while(bombCounter) {
-      // Set bomb to random coordinates of map
       let x: number = randomIntFromInterval(0, cfg.width - 1);
       let y: number = randomIntFromInterval(0, cfg.height - 1);
       newBoard[x][y] = {
@@ -59,20 +57,31 @@ const Board = ({difficulty} : BoardProps)  => {
       }
     }
 
-    // set state
     setBoard(newBoard);
   }, [cfg]);
-
-  useEffect(() => {
-    console.log('board updated');
-    console.log(board);
-  }, [board]);
 
   const OpenCell = (x: number, y: number) => {
     if(!board) return;
     let newBoard = board;
     newBoard[x][y].isOpened = true;
     setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
+
+    // TO-DO: Add a check if the player opens a bomb
+  }
+
+  // TO-DO: Create this function, opens neighbouring cells (if there are any) until you find a number
+  const OpenCells = () => {
+
+  }
+
+  // TO-DO: Create this function
+  const RevealCells = () => {
+
+  }
+
+  // TO-DO: Create this function
+  const FlagCell = () => {
+
   }
 
   return (
@@ -87,9 +96,9 @@ const Board = ({difficulty} : BoardProps)  => {
                   return (
                     subCells.isOpened ? (
                       <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-opened-cell bg-cover'>
-                        <span>
+                        <span style={{color: subCells.value > 0 ? `#${colors[subCells.value - 1]}` : 'black'}} className='font-bold'>
                           {subCells.type === 'mine' ?
-                            <img className='w-4 h-4' src={mine} alt='M' /> : subCells.value}
+                            <img className='w-4 h-4' src={mine} alt='M' /> : subCells.value > 0 ? subCells.value : ' '}
                         </span>
                       </div>
                     ) : (
