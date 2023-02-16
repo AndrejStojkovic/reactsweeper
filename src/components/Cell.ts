@@ -3,6 +3,7 @@ export type Cell = {
   type: 'mine' | 'empty',
   value: number,
   flagged: boolean,
+  exploded: boolean,
   onClick?: () => void
 }
 

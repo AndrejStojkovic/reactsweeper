@@ -22,19 +22,21 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
       newBoard.push([]);
     }
 
+    // Create the board
     for(var i = 0; i < cfg.width; i++) {
       for(var j = 0; j < cfg.height; j++) {
         newBoard[i][j] = {
           isOpened: false,
           type: 'empty',
-          value: -1,
-          flagged: false
+          value: 0,
+          flagged: false,
+          exploded: false
         };
       }
     }
 
+    // Add mines to the board
     let bombCounter = cfg.mines;
-
     while(bombCounter) {
       let x: number = randomIntFromInterval(0, cfg.width - 1);
       let y: number = randomIntFromInterval(0, cfg.height - 1);
@@ -42,11 +44,13 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
         isOpened: false,
         type: 'mine',
         value: -1,
-        flagged: false
+        flagged: false,
+        exploded: false
       };
       bombCounter--;
     }
 
+    // Count the mines around each cell and set the value
     // eslint-disable-next-line
     for(var i = 0; i < cfg.width; i++) {
       // eslint-disable-next-line
@@ -56,7 +60,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
             isOpened: false,
             type: 'empty',
             value: countMines(newBoard, i, j, cfg.width, cfg.height),
-            flagged: false
+            flagged: false,
+            exploded: false
           };
         }
       }
@@ -66,9 +71,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
   }, [cfg]);
 
   const OpenCell = (x: number, y: number) => {
-    if(!gameState) {
-      StartGame();
-    }
+    if(!gameState) StartGame();
 
     if(!board) return;
 
