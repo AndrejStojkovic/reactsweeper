@@ -14,6 +14,7 @@ type BoardProps = {
 const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
   const cfg = config[difficulty as Difficulty];
   const [board, setBoard] = useState<Cell[][]>();
+  const [openedCells, setOpenedCells] = useState(0);
 
   useEffect(() => {
     let newBoard: Cell[][] = [];
@@ -68,16 +69,19 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
     }
 
     setBoard(newBoard);
+    setOpenedCells(0);
   }, [cfg]);
 
   const OpenCell = (x: number, y: number) => {
-    if(!gameState) StartGame();
-
     if(!board) return;
+
+    if(!gameState && openedCells > 0) return;
+
+    if(!gameState) StartGame();
 
     if(!isValid(x, y, cfg.width, cfg.height)) return;
 
-    if(board[x][y].isOpened) return;
+    if(board[x][y].isOpened || board[x][y].flagged) return;
 
     let newBoard = board;
     newBoard[x][y].isOpened = true;
@@ -93,6 +97,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
       Flood(x, y);
     }
 
+    setOpenedCells(openedCells + 1);
     setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
   }
 
@@ -136,7 +141,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
                         </span>
                       </div>
                     ) : (
-                      <div key={j} className='flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold cursor-pointer hover:bg-gray-200 bg-unopened-cell bg-cover'
+                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${gameState || !openedCells ? 'cursor-pointer' : 'cursor-default'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
                         onClick={() => OpenCell(i, j)}>
                       </div>
                     )
