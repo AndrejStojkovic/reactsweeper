@@ -124,10 +124,9 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
   }
 
   return (
-    <div>Board <br />
+    <div>
       <div>
-        {cfg.width} - {cfg.height} - {cfg.mines}
-        <div className='board flex flex-col border-1 border-gray-600'>
+        <div className='board flex flex-col select-none border-2 border-t-[#8c8c8c] border-l-[#8c8c8c] border-b-white border-r-white'>
           {board?.map((cells, i) => {
             return (
               <div key={i} className='row flex flex-row'>
