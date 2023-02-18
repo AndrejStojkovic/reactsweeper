@@ -169,7 +169,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
                     ) : (
                       <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${gameState || !openedCells ? 'cursor-pointer' : 'cursor-default'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
                         onClick={() => OpenCell(i, j)} onContextMenu={() => FlagCell(i, j)}>
-                          {subCells.flagged && <img src={flag} alt='F' />}
+                          {subCells.flagged && <img src={flag} className='w-5 h-5' alt='F' />}
                       </div>
                     )
                   )

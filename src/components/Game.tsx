@@ -69,7 +69,7 @@ const Game = () => {
               <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(flagCounter, 3)}</div>
             </div>
 
-            <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer'>
+            <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer' onClick={() => EndGame()}>
               <img src={smiley} className='w-5 h-5' alt='S' />
             </div>
 
