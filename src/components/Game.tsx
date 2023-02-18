@@ -14,18 +14,24 @@ import SmileyLose from '../media/smiley_lose.png';
 
 const Game = () => {
   const [gameState, setGameState] = useState(false);  // false - not started, true - started
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(0);  // -1 = lose, 0 = normal, 1 = win
   const [difficulty, setDifficulty] = useState('beginner');
   const [highscore, setHighscore] = useState(0);
   const [playCounter, setPlayCounter] = useState(0);
-  const [mineCounter, setMineCounter] = useState(0);
+  const [flagCounter, setFlagCounter] = useState(0);
+  const [smiley, setSmiley] = useState(SmileyNormal);
 
   const StartGame = () => setGameState(true);
   const EndGame = () => setGameState(false);
-  const SetMines = (val: number) => setMineCounter(val);
-  const SetState = (val: boolean) => setState(val);
+  const SetFlags = (val: number) => setFlagCounter(val);
+  const SetState = (val: number) => setState(val);
 
   useEffect(() => {
+    setSmiley(state === 1 ? SmileyWin : state === -1 ? SmileyLose : SmileyNormal);
+  }, [gameState]);
+
+  useEffect(() => {
+    document.getElementsByClassName('game')[0].addEventListener('contextmenu', (e) => {e.preventDefault()});
     setHighscore(Number(getHighscoreLocalStorage()));
     setPlayCounter(Number(getPlayCounterLocalStorage()));
   }, []);
@@ -60,11 +66,11 @@ const Game = () => {
           <div className='flex flex-row justify-between items-center mb-2 p-1 select-none border-2 border-minesweeper'>
             <div className='flag-counter relative bg-black font-digital text-[42px] text-[#600000] leading-[0.75] border-1 border-minesweeper'>
               <div>888</div>
-              <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(mineCounter, 3)}</div>
+              <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(flagCounter, 3)}</div>
             </div>
 
             <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer'>
-              <img src={SmileyNormal} className='w-5 h-5' alt='S' />
+              <img src={smiley} className='w-5 h-5' alt='S' />
             </div>
 
             <div className='timer relative bg-black font-digital text-[42px] text-[#600000] leading-[0.75] border-1 border-minesweeper'>
@@ -76,7 +82,8 @@ const Game = () => {
             gameState={gameState}
             StartGame={StartGame}
             EndGame={EndGame}
-            SetMines={SetMines}
+            Flags={flagCounter}
+            SetFlags={SetFlags}
             SetState={SetState}/>
         </div>
         

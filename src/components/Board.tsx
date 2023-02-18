@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { config, Difficulty, colors } from '../lib/config';
 import { randomIntFromInterval } from '../lib/functions';
 import mine from '../media/mine.png';
+import flag from '../media/flag.png';
 import { Cell } from './Cell';
 
 type BoardProps = {
   difficulty: string,
   gameState: boolean,
+  SetState: (val: number) => void,
   StartGame: () => void,
   EndGame: () => void,
-  SetMines: (val: number) => void,
-  SetState: (val: boolean) => void
+  Flags: number,
+  SetFlags: (val: number) => void
 }
 
-const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} : BoardProps)  => {
+const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetState} : BoardProps)  => {
   const cfg = config[difficulty as Difficulty];
   const [board, setBoard] = useState<Cell[][]>();
   const [openedCells, setOpenedCells] = useState(0);
@@ -70,8 +72,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} :
       }
     }
 
-    SetMines(cfg.mines);
-    SetState(false);
+    SetFlags(cfg.mines);
+    SetState(0);
     setBoard(newBoard);
     setOpenedCells(0);
   }
@@ -97,6 +99,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} :
     if(newBoard[x][y].type === 'mine') {
       newBoard[x][y].exploded = true;
       RevealBombs();
+      SetState(-1);
       EndGame();
     }
 
@@ -108,7 +111,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} :
     setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
 
     if(openedCells === (cfg.width * cfg.height) - cfg.mines) {
-      SetState(true);
+      SetState(1);
       EndGame();
     }
   }
@@ -131,7 +134,19 @@ const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} :
   }
 
   // TO-DO: Create this function
-  const FlagCell = () => {
+  const FlagCell = (x: number, y: number) => {
+    if(!board) return;
+
+    if(!isValid(x, y, cfg.width, cfg.height)) return;
+
+    if(board[x][y].isOpened) return;
+
+    let newBoard = board;
+    newBoard[x][y].flagged = !newBoard[x][y].flagged;
+
+    SetFlags(newBoard[x][y].flagged ? Flags - 1 : Flags + 1)
+
+    setBoard(newBoard.slice(0));
 
   }
 
@@ -153,7 +168,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} :
                       </div>
                     ) : (
                       <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${gameState || !openedCells ? 'cursor-pointer' : 'cursor-default'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
-                        onClick={() => OpenCell(i, j)}>
+                        onClick={() => OpenCell(i, j)} onContextMenu={() => FlagCell(i, j)}>
+                          {subCells.flagged && <img src={flag} alt='F' />}
                       </div>
                     )
                   )
