@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/reactsweeper/static/css/main.586e2f72.css",
+    "main.js": "/reactsweeper/static/js/main.6d7764ed.js",
+    "static/media/start.ttf": "/reactsweeper/static/media/start.2ebf1a35a67b4271603e.ttf",
+    "static/media/digital-7.ttf": "/reactsweeper/static/media/digital-7.d60dc6e509634f05c9b3.ttf",
+    "index.html": "/reactsweeper/index.html",
+    "main.586e2f72.css.map": "/reactsweeper/static/css/main.586e2f72.css.map",
+    "main.6d7764ed.js.map": "/reactsweeper/static/js/main.6d7764ed.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.586e2f72.css",
+    "static/js/main.6d7764ed.js"
+  ]
+}
