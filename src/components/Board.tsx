@@ -115,9 +115,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     setOpenedCells(countOpenCells(board, cfg.width, cfg.height));
     setBoard(board.slice(0));  // .slice(0) forces the array to re-render or .map in this case
 
-    console.log(setOpenedCells);
-
-    if(openedCells === (cfg.width * cfg.height) - cfg.mines && Flags >= 0) {
+    if(countOpenCells(board, cfg.width, cfg.height) === (cfg.width * cfg.height) - cfg.mines && Flags >= 0) {
       SetState(1);
       EndGame();
     }
@@ -174,7 +172,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
                         </span>
                       </div>
                     ) : (
-                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${gameState || !openedCells ? 'cursor-pointer' : 'cursor-default'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
+                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${!gameState ? 'cursor-default' : 'cursor-pointer'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
                         onClick={() => OpenCell(i, j)} onContextMenu={() => FlagCell(i, j)}>
                         {subCells.flagged && <img src={flag} className='w-5 h-5' alt='F' />}
                       </div>

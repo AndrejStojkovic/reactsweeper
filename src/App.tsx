@@ -1,5 +1,6 @@
 import React from 'react';
 import Game from './components/Game';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
             <h3 className='text-lg'>The famous Minesweeper game made with React and Typescript.</h3>
           </div>
           <Game />
+          <Footer />
         </div>
       </div>
     </div>

@@ -42,6 +42,8 @@ const Game = () => {
   });
 
   const updateTimer = async () => {
+    if(timer === 999) EndGame();
+    
     setTimeout(() => {
       setTimer(timer + 1);
     }, 1000);
