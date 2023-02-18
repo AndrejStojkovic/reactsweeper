@@ -17,6 +17,7 @@ const Game = () => {
   const [state, setState] = useState(0);  // -1 = lose, 0 = normal, 1 = win
   const [difficulty, setDifficulty] = useState('beginner');
   const [highscore, setHighscore] = useState(0);
+  const [timer, setTimer] = useState(0);
   const [playCounter, setPlayCounter] = useState(0);
   const [flagCounter, setFlagCounter] = useState(0);
   const [smiley, setSmiley] = useState(SmileyNormal);
@@ -35,6 +36,16 @@ const Game = () => {
     setHighscore(Number(getHighscoreLocalStorage()));
     setPlayCounter(Number(getPlayCounterLocalStorage()));
   }, []);
+
+  useEffect(() => {
+    if(gameState) updateTimer();
+  });
+
+  const updateTimer = async () => {
+    setTimeout(() => {
+      setTimer(timer + 1);
+    }, 1000);
+  }
 
   const changeDifficulty = (e: any) => {
     setDifficulty(e.target.value);
@@ -81,7 +92,7 @@ const Game = () => {
 
             <div className='timer relative bg-black font-digital text-[42px] text-[#600000] leading-[0.75] border-1 border-minesweeper'>
               <div>888</div>
-              <div className='text-[#ff0000] absolute top-0 left-0'>000</div>
+              <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(timer, 3)}</div>
             </div>
           </div>
           <Board difficulty={difficulty}

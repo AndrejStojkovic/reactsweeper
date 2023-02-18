@@ -112,8 +112,10 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
       Flood(x, y);
     }
 
-    setOpenedCells(openedCells + 1);
+    setOpenedCells(countOpenCells(board, cfg.width, cfg.height));
     setBoard(board.slice(0));  // .slice(0) forces the array to re-render or .map in this case
+
+    console.log(setOpenedCells);
 
     if(openedCells === (cfg.width * cfg.height) - cfg.mines && Flags >= 0) {
       SetState(1);
@@ -193,6 +195,16 @@ function countMines(board: Cell[][], i: number, j: number, width: number, height
   for(var x = i - 1; x <= i + 1; x++) {
     for(var y = j - 1; y <= j + 1; y++) {
       ct += isValid(x, y, width, height) && board[x][y].type === 'mine' ? 1 : 0;
+    }
+  }
+  return ct;
+}
+
+function countOpenCells(board: Cell[][], width: number, height: number) {
+  let ct = 0;
+  for(let i = 0; i < width; i++) {
+    for(let j = 0; j < height; j++) {
+      ct += isValid(i, j, width, height) && board[i][j].isOpened ? 1 : 0;
     }
   }
   return ct;
