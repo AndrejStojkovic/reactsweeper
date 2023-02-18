@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { config, Difficulty, colors } from '../lib/config';
-import { randomIntFromInterval } from '../lib/functions';
+import { randomIntFromInterval, isValid } from '../lib/functions';
 import mine from '../media/mine.png';
 import flag from '../media/flag.png';
 import { Cell } from './Cell';
@@ -168,7 +168,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
                     ) : (
                       <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-50 text-sm font-semibold ${gameState || !openedCells ? 'cursor-pointer' : 'cursor-default'} hover:bg-gray-200 bg-unopened-cell bg-cover`}
                         onClick={() => OpenCell(i, j)} onContextMenu={() => FlagCell(i, j)}>
-                          {subCells.flagged && <img src={flag} className='w-5 h-5' alt='F' />}
+                        {subCells.flagged && <img src={flag} className='w-5 h-5' alt='F' />}
                       </div>
                     )
                   )
@@ -186,16 +186,10 @@ function countMines(board: Cell[][], i: number, j: number, width: number, height
   let ct = 0;
   for(var x = i - 1; x <= i + 1; x++) {
     for(var y = j - 1; y <= j + 1; y++) {
-      if(isValid(x, y, width, height) && board[x][y].type === 'mine') {
-        ct++;
-      }
+      ct += isValid(x, y, width, height) && board[x][y].type === 'mine' ? 1 : 0;
     }
   }
   return ct;
-}
-
-function isValid(i: number, j: number, width: number, height: number) {
-  return i >= 0 && i < width && j >= 0 && j < height;
 }
 
 export default Board;
