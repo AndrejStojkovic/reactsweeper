@@ -8,15 +8,17 @@ type BoardProps = {
   difficulty: string,
   gameState: boolean,
   StartGame: () => void,
-  EndGame: () => void
+  EndGame: () => void,
+  SetMines: (val: number) => void,
+  SetState: (val: boolean) => void
 }
 
-const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
+const Board = ({difficulty, gameState, StartGame, EndGame, SetMines, SetState} : BoardProps)  => {
   const cfg = config[difficulty as Difficulty];
   const [board, setBoard] = useState<Cell[][]>();
   const [openedCells, setOpenedCells] = useState(0);
 
-  useEffect(() => {
+  const Reset = () => {
     let newBoard: Cell[][] = [];
 
     for(var s = 0; s < cfg.width; s++) {
@@ -68,8 +70,14 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
       }
     }
 
+    SetMines(cfg.mines);
+    SetState(false);
     setBoard(newBoard);
     setOpenedCells(0);
+  }
+
+  useEffect(() => {
+    Reset();
   }, [cfg]);
 
   const OpenCell = (x: number, y: number) => {
@@ -89,7 +97,6 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
     if(newBoard[x][y].type === 'mine') {
       newBoard[x][y].exploded = true;
       RevealBombs();
-      // TO-DO: Mark the bomb with a red background
       EndGame();
     }
 
@@ -99,6 +106,11 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
 
     setOpenedCells(openedCells + 1);
     setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
+
+    if(openedCells === (cfg.width * cfg.height) - cfg.mines) {
+      SetState(true);
+      EndGame();
+    }
   }
 
   const Flood = (x: number, y: number) => {
@@ -126,15 +138,15 @@ const Board = ({difficulty, gameState, StartGame, EndGame} : BoardProps)  => {
   return (
     <div>
       <div>
-        <div className='board flex flex-col select-none border-2 border-t-[#8c8c8c] border-l-[#8c8c8c] border-b-white border-r-white'>
+        <div className='board flex flex-col select-none border-2 border-minesweeper'>
           {board?.map((cells, i) => {
             return (
               <div key={i} className='row flex flex-row'>
                 {cells.map((subCells, j) => {
                   return (
                     subCells.isOpened ? (
-                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-100 text-sm font-semibold bg-cover ${subCells.exploded ? 'bg-exploded-cell' : 'bg-opened-cell'}`}>
-                        <span style={{color: subCells.value > 0 ? `#${colors[subCells.value - 1]}` : 'black'}} className='font-bold'>
+                      <div key={j} className={`flex items-center justify-center w-6 h-6 bg-gray-100 text-xs font-game bg-cover ${subCells.exploded ? 'bg-exploded-cell' : 'bg-opened-cell'}`}>
+                        <span style={{color: subCells.value > 0 ? `#${colors[subCells.value - 1]}` : 'black'}} className={`font-bold ${subCells.value > 0 ? 'mt-[1px]' : ''}`}>
                           {subCells.type === 'mine' ?
                             <img className='w-4 h-4' src={mine} alt='M' /> : subCells.value > 0 ? subCells.value : ' '}
                         </span>

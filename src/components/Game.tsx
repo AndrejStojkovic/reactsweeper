@@ -5,16 +5,25 @@ import {
   getPlayCounterLocalStorage,
   setPlayCounterLocalStorage
 } from '../lib/localStorage';
+import { leadingZeroes } from '../lib/functions';
 import Board from './Board';
+
+import SmileyNormal from '../media/smiley_normal.png';
+import SmileyWin from '../media/smiley_win.png';
+import SmileyLose from '../media/smiley_lose.png';
 
 const Game = () => {
   const [gameState, setGameState] = useState(false);  // false - not started, true - started
+  const [state, setState] = useState(false);
   const [difficulty, setDifficulty] = useState('beginner');
   const [highscore, setHighscore] = useState(0);
   const [playCounter, setPlayCounter] = useState(0);
+  const [mineCounter, setMineCounter] = useState(0);
 
   const StartGame = () => setGameState(true);
   const EndGame = () => setGameState(false);
+  const SetMines = (val: number) => setMineCounter(val);
+  const SetState = (val: boolean) => setState(val);
 
   useEffect(() => {
     setHighscore(Number(getHighscoreLocalStorage()));
@@ -48,10 +57,27 @@ const Game = () => {
 
       <div className='game w-full flex flex-col items-center justify-center'>
         <div className='bg-[#bdbdbd] p-2'>
+          <div className='flex flex-row justify-between items-center mb-2 p-1 select-none border-2 border-minesweeper'>
+            <div className='flag-counter relative bg-black font-digital text-[42px] text-[#600000] leading-[0.75] border-1 border-minesweeper'>
+              <div>888</div>
+              <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(mineCounter, 3)}</div>
+            </div>
+
+            <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer'>
+              <img src={SmileyNormal} className='w-5 h-5' alt='S' />
+            </div>
+
+            <div className='timer relative bg-black font-digital text-[42px] text-[#600000] leading-[0.75] border-1 border-minesweeper'>
+              <div>888</div>
+              <div className='text-[#ff0000] absolute top-0 left-0'>000</div>
+            </div>
+          </div>
           <Board difficulty={difficulty}
             gameState={gameState}
             StartGame={StartGame}
-            EndGame={EndGame}/>
+            EndGame={EndGame}
+            SetMines={SetMines}
+            SetState={SetState}/>
         </div>
         
       </div>
