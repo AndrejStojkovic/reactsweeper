@@ -45,6 +45,12 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     while(bombCounter) {
       let x: number = randomIntFromInterval(0, cfg.width - 1);
       let y: number = randomIntFromInterval(0, cfg.height - 1);
+      
+      while(newBoard[x][y].type === 'mine') {
+        x = randomIntFromInterval(0, cfg.width - 1);
+        y = randomIntFromInterval(0, cfg.height - 1);
+      }
+
       newBoard[x][y] = {
         isOpened: false,
         type: 'mine',
