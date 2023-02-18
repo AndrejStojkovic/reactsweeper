@@ -8,10 +8,10 @@ import { Cell } from './Cell';
 type BoardProps = {
   difficulty: string,
   gameState: boolean,
+  Flags: number,
   SetState: (val: number) => void,
   StartGame: () => void,
   EndGame: () => void,
-  Flags: number,
   SetFlags: (val: number) => void
 }
 
@@ -93,24 +93,23 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
 
     if(board[x][y].isOpened || board[x][y].flagged) return;
 
-    let newBoard = board;
-    newBoard[x][y].isOpened = true;
+    board[x][y].isOpened = true;
     
-    if(newBoard[x][y].type === 'mine') {
-      newBoard[x][y].exploded = true;
+    if(board[x][y].type === 'mine') {
+      board[x][y].exploded = true;
       RevealBombs();
       SetState(-1);
       EndGame();
     }
 
-    if(newBoard[x][y].type === 'empty' && !newBoard[x][y].value) {
+    if(board[x][y].type === 'empty' && !board[x][y].value) {
       Flood(x, y);
     }
 
     setOpenedCells(openedCells + 1);
-    setBoard(newBoard.slice(0));  // .slice(0) forces the array to re-render or .map in this case
+    setBoard(board.slice(0));  // .slice(0) forces the array to re-render or .map in this case
 
-    if(openedCells === (cfg.width * cfg.height) - cfg.mines) {
+    if(openedCells === (cfg.width * cfg.height) - cfg.mines && Flags >= 0) {
       SetState(1);
       EndGame();
     }
@@ -124,9 +123,11 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
   }
 
   const RevealBombs = () => {
+    if(!board) return;
+
     for(let i = 0; i < cfg.width; i++) {
       for(let j = 0; j < cfg.height; j++) {
-        if(board && board[i][j].type === 'mine') {
+        if(board[i][j].type === 'mine' && !board[i][j].flagged) {
           board[i][j].isOpened = true;
         }
       }
@@ -135,19 +136,17 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
 
   // TO-DO: Create this function
   const FlagCell = (x: number, y: number) => {
-    if(!board) return;
+    if(!gameState) return;
+
+    if(!board) return;    
 
     if(!isValid(x, y, cfg.width, cfg.height)) return;
 
     if(board[x][y].isOpened) return;
 
-    let newBoard = board;
-    newBoard[x][y].flagged = !newBoard[x][y].flagged;
-
-    SetFlags(newBoard[x][y].flagged ? Flags - 1 : Flags + 1)
-
-    setBoard(newBoard.slice(0));
-
+    board[x][y].flagged = !board[x][y].flagged;
+    SetFlags(board[x][y].flagged ? Flags - 1 : Flags + 1)
+    setBoard(board.slice(0));
   }
 
   return (
