@@ -36,12 +36,18 @@ const Game = () => {
     setPlayCounter(Number(getPlayCounterLocalStorage()));
   }, []);
 
+  const changeDifficulty = (e: any) => {
+    setDifficulty(e.target.value);
+    EndGame();
+    setState(0);
+  }
+
   return (
     <div className='w-full'>
       <div className='settings'>
         <div className='difficulty flex items-center justify-center mb-1'>
           <div>Difficulty: </div>
-          <select onChange={(e) => setDifficulty(e.target.value)}
+          <select onChange={(e) => changeDifficulty(e)}
                   className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 ml-2'>
             <option value='beginner'>Beginner</option>
             <option value='intermediate'>Intermediate</option>
@@ -69,7 +75,7 @@ const Game = () => {
               <div className='text-[#ff0000] absolute top-0 left-0'>{leadingZeroes(flagCounter, 3)}</div>
             </div>
 
-            <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer' onClick={() => EndGame()}>
+            <div className='flex justify-center items-center smiley w-8 h-8 bg-cover bg-unopened-cell cursor-pointer' onClick={() => window.location.reload()}>
               <img src={smiley} className='w-5 h-5' alt='S' />
             </div>
 
@@ -80,9 +86,9 @@ const Game = () => {
           </div>
           <Board difficulty={difficulty}
             gameState={gameState}
+            Flags={flagCounter}
             StartGame={StartGame}
             EndGame={EndGame}
-            Flags={flagCounter}
             SetFlags={SetFlags}
             SetState={SetState}/>
         </div>
