@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* This is fine for now, but in the future there should be custom made sprites for the numbers */
 @font-face {
-  font-family: 'Game Over';
-  src: url('./fonts/game_over.ttf') format('truetype');
+  font-family: 'Arcade';
+  src: url('./fonts/start.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Digital-7';
+  src: url('./fonts/digital-7.ttf') format('truetype');
 }
 
 body {
@@ -18,4 +24,16 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.font-game {
+  font-family: 'Arcade'!important;
+}
+
+.font-digital {
+  font-family: 'Digital-7'!important;
+}
+
+.border-minesweeper {
+  @apply border-t-[#8c8c8c] border-l-[#8c8c8c] border-b-white border-r-white;
 }
