@@ -12,6 +12,11 @@
   </p>
 </p>
 
+## TO-DO:
+
+- Timer updates even though the game has ended
+- 'Middle Click' on open cells or cells with flags around them feature needs to be added
+- Another pass needs to be added in case there is an empty cell without it's neighbours opened
 
 ## Table of contents
 
