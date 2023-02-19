@@ -27,14 +27,34 @@ const Game = () => {
   const SetFlags = (val: number) => setFlagCounter(val);
   const SetState = (val: number) => setState(val);
 
+  const SetStats = () => {
+    setHighscore(Number(getHighscoreLocalStorage()));
+    setPlayCounter(Number(getPlayCounterLocalStorage()));
+  }
+
   useEffect(() => {
     setSmiley(state === 1 ? SmileyWin : state === -1 ? SmileyLose : SmileyNormal);
+
+    if(!gameState) {
+      if(timer < highscore) {
+        setHighscore(timer);
+        setHighscoreLocalStorage(timer.toString());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState]);
 
   useEffect(() => {
+    if(state === 1 || state === -1) {
+      setPlayCounter(playCounter + 1);
+      setPlayCounterLocalStorage((playCounter + 1).toString());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+  useEffect(() => {
     document.getElementsByClassName('game')[0].addEventListener('contextmenu', (e) => {e.preventDefault()});
-    setHighscore(Number(getHighscoreLocalStorage()));
-    setPlayCounter(Number(getPlayCounterLocalStorage()));
+    SetStats();
   }, []);
 
   useEffect(() => {

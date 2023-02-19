@@ -89,6 +89,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
 
   useEffect(() => {
     Reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cfg]);
 
   const OpenCell = (x: number, y: number) => {
@@ -155,8 +156,17 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     if(board[x][y].isOpened) return;
 
     board[x][y].flagged = !board[x][y].flagged;
-    SetFlags(board[x][y].flagged ? Flags - 1 : Flags + 1)
+
     setBoard(board.slice(0));
+
+    let currentFlags = 0;
+    for(let i = 0; i < cfg.width; i++) {
+      for(let j = 0; j < cfg.height; j++) {
+        currentFlags += board[i][j].flagged ? 1 : 0;
+      }
+    }
+    
+    SetFlags(cfg.mines - currentFlags);
   }
 
   return (
@@ -197,6 +207,7 @@ function openNeighbourCells(board: Cell[][], i: number, j: number, width: number
     for(var y = j - 1; y <= j + 1; y++) {
       if(isValid(x, y, width, height)) {
         board[x][y].isOpened = true;
+        board[x][y].flagged = false;
       }
     }
   }
