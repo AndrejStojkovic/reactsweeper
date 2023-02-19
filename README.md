@@ -8,9 +8,7 @@
   <p align="center">
     The famous Minesweeper game made with React and Typescript.
     <br>
-    <a href="https://github.com/AndrejStojkovic/reactsweeper/issues/new?template=bug.md">Report bug</a>
-    ·
-    <a href="https://github.com/AndrejStojkovic/reactsweeper/issues/new?template=feature.md&labels=feature">Request feature</a>
+    <a href="https://github.com/AndrejStojkovic/reactsweeper/issues/new">Report bug or Request a feature</a>
   </p>
 </p>
 
