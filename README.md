@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://andrejstojkovic.github.io/reactsweeper/">
-    <img src="https://github.com/AndrejStojkovic/reactsweeper/tree/master/misc/logo.png" alt="Logo" width=128 height=128>
+    <img src="https://github.com/AndrejStojkovic/reactsweeper/blob/master/misc/logo.png" alt="Logo" width=128 height=128>
   </a>
 
   <h3 align="center">Reactsweeper</h3>
