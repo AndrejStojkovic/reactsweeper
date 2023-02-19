@@ -16,7 +16,6 @@
 
 - Timer updates even though the game has ended
 - 'Middle Click' on open cells or cells with flags around them feature needs to be added
-- Another pass needs to be added in case there is an empty cell without it's neighbours opened
 - Flag counter doesn't update if you open a cell while it's flagged
 - Difficulty should not change when refreshing a page
 - The reset button should not refresh the page, it should just reset the board

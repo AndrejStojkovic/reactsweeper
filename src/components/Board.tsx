@@ -114,7 +114,6 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     }
 
     if(board[x][y].type === 'empty' && !board[x][y].value) {
-      setBoard(openNeighbourCells(board, x, y, cfg.width, cfg.height).slice(0));
       Flood(x, y);
     }
 
@@ -128,10 +127,17 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
   }
 
   const Flood = (x: number, y: number) => {
-    OpenCell(x - 1, y);
-    OpenCell(x + 1, y);
-    OpenCell(x, y - 1);
-    OpenCell(x, y + 1);
+    if(!board) return;
+
+    for(let i = x - 1; i <= x + 1; i++) {
+      for(let j = y - 1; j <= y + 1; j++) {
+        if(i === x && j === y) continue;
+        if(!isValid(i, j, cfg.width, cfg.height)) continue;
+
+        OpenCell(i, j);
+        board[i][j].flagged = false;
+      }
+    }
   }
 
   const RevealBombs = () => {
@@ -202,22 +208,10 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
   )
 }
 
-function openNeighbourCells(board: Cell[][], i: number, j: number, width: number, height: number) {
-  for(var x = i - 1; x <= i + 1; x++) {
-    for(var y = j - 1; y <= j + 1; y++) {
-      if(isValid(x, y, width, height)) {
-        board[x][y].isOpened = true;
-        board[x][y].flagged = false;
-      }
-    }
-  }
-  return board;
-}
-
 function countMines(board: Cell[][], i: number, j: number, width: number, height: number) {
   let ct = 0;
-  for(var x = i - 1; x <= i + 1; x++) {
-    for(var y = j - 1; y <= j + 1; y++) {
+  for(let x = i - 1; x <= i + 1; x++) {
+    for(let y = j - 1; y <= j + 1; y++) {
       ct += isValid(x, y, width, height) && board[x][y].type === 'mine' ? 1 : 0;
     }
   }
