@@ -35,7 +35,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
           type: 'empty',
           value: 0,
           flagged: false,
-          exploded: false
+          exploded: false,
+          visited: false
         };
       }
     }
@@ -56,7 +57,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
         type: 'mine',
         value: -1,
         flagged: false,
-        exploded: false
+        exploded: false,
+        visited: false
       };
       bombCounter--;
     }
@@ -72,7 +74,8 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
             type: 'empty',
             value: countMines(newBoard, i, j, cfg.width, cfg.height),
             flagged: false,
-            exploded: false
+            exploded: false,
+            visited: false
           };
         }
       }
@@ -97,9 +100,10 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
 
     if(!isValid(x, y, cfg.width, cfg.height)) return;
 
-    if(board[x][y].isOpened || board[x][y].flagged) return;
+    if(board[x][y].visited || board[x][y].flagged) return;
 
     board[x][y].isOpened = true;
+    board[x][y].visited = true;
     
     if(board[x][y].type === 'mine') {
       board[x][y].exploded = true;
@@ -109,6 +113,7 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     }
 
     if(board[x][y].type === 'empty' && !board[x][y].value) {
+      setBoard(openNeighbourCells(board, x, y, cfg.width, cfg.height).slice(0));
       Flood(x, y);
     }
 
@@ -140,7 +145,6 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
     }
   }
 
-  // TO-DO: Create this function
   const FlagCell = (x: number, y: number) => {
     if(!gameState) return;
 
@@ -186,6 +190,17 @@ const Board = ({difficulty, gameState, StartGame, EndGame, Flags, SetFlags, SetS
       </div>
     </div>
   )
+}
+
+function openNeighbourCells(board: Cell[][], i: number, j: number, width: number, height: number) {
+  for(var x = i - 1; x <= i + 1; x++) {
+    for(var y = j - 1; y <= j + 1; y++) {
+      if(isValid(x, y, width, height)) {
+        board[x][y].isOpened = true;
+      }
+    }
+  }
+  return board;
 }
 
 function countMines(board: Cell[][], i: number, j: number, width: number, height: number) {

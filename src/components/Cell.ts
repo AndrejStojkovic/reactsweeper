@@ -4,5 +4,6 @@ export type Cell = {
   value: number,
   flagged: boolean,
   exploded: boolean,
+  visited: boolean,
   onClick?: () => void
 }
